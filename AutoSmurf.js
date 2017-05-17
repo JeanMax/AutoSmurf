@@ -13,24 +13,25 @@
 function AutoSmurf() {
  // USER SETTINGS
  // -------- Normal Difficulty -------------
-	var caveLvl = 6,
-		tristLvl = 17,
-		tombsLvl = 24,
-		mephLvl = 23,
+	var caveLvl = 3,
+		tristLvl = 16,
+		tombsLvl = 22,
+		mephLvl = 22,
 		diaLvl = 30,
-		baalLvl = 45,
+		baalLvl = 44,
  // -------- Nightmare Difficulty ----------
-		mephLvlnm = 48,
-		diaLvlnm = 55,
-		mfLvlnm = 62,
-		baalLvlnm = 74,
+		mephLvlnm = 44,
+		diaLvlnm = 54,
+		mfLvlnm = 66,
+		baalLvlnm = 77,
 // ---------- Hell Difficulty --------------
-		mephLvlhell = 75,
+		mephLvlhell = 77,
 		diaLvlhell = 79,
+		mfLvlhell = 86,
 
 
 
-
+// Config.AutoSmurf.AllTeamProfiles;
 
 
 //---------------------------------------be-sure-of-what-you-edit-under-this-line--------------------------------------------//
@@ -79,6 +80,14 @@ function AutoSmurf() {
 		wait = 0,
 		ok = 1,
 		mercid = [];
+
+	Messaging.sendToList = function(list, message, mode=55) {
+	    return list.forEach((profileName) => {
+	        if (profileName.toLowerCase() != me.profile.toLowerCase()) {
+	            sendCopyData(null, profileName, mode, JSON.stringify({ nick: me.profile, msg: message }));
+	        }
+	    });
+	};
 
 
 //TEAMS
@@ -217,7 +226,7 @@ function AutoSmurf() {
 
 		//D2Bot.shoutGlobal(me.realm + " " + me.gamename + " ready", 69);
 
-		say("ready");
+		Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "ready");
 
 		while (!teamIsReady) {
 			delay(500);
@@ -236,34 +245,34 @@ function AutoSmurf() {
 		print("startSharing: " + startSharing + " lowestAct: " + lowestAct);
 
 		if (me.findItem(546) || me.findItem(547) || potion || me.getQuest(20, 1)) { // Have A Jade Figurine, The Golden Bird or the Potion of Life or need to Return to Alkor for Reward. Tell the Teleporting Sorc so she gets us to process it.
-			say("team figurine");
+			Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "team figurine");
 
 			teamFigurine = true;
 		}
 		if(boBarb && me.charlvl >= 24){ //announce bo
-			say("bo");
+			Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "bo");
 		}
 		if (me.gold < Config.LowGold) { //teamGold - ask
-			say("GimmeGold");
+			Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "GimmeGold");
 		}
 		if(me.getItem(524) || me.getItem(525)){	 //teamscroll
-			say("GotScroll");
+			Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "GotScroll");
 		}
 		if(me.getItem(92)){ //teamStaff
-			say("GotStaff");
+			Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "GotStaff");
 		}
 		if(me.getItem(91)){	 //teamStaff2
-			say("GotThePower");
+			Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "GotThePower");
 		}
 		if((me.getItem(553)&&me.getItem(554)&&me.getItem(555)) || me.getItem(174)  ){	 //teamflail
-			say("ReadyForTravincal");
+			Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "ReadyForTravincal");
 		}
 		if (me.getItem(555)){	 //teambrain
-			say("GotBrain");
+			Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "GotBrain");
 		}
 		if (!teleportingSorc) { // I'm a follower.
 			if (!me.getItem(549) && me.area === 40) { // Don't have cube, am in Act 2.
-				say("need cube");
+				Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "need cube");
 			}
 		}
 //---------------------Assembling myWaypoints & Saying In Game---------------------
@@ -283,7 +292,7 @@ function AutoSmurf() {
 			myWaypointsString += myWaypoints[i];
 		}
 
-		say(myWaypointsString); // Announce my Waypoint possession values.
+		Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, myWaypointsString); // Announce my Waypoint possession values.
 //---------------------End Announcing myWaypoints---------------------
 		var j = 0;
 
@@ -469,10 +478,10 @@ function AutoSmurf() {
 		}
 
 		if (getTickCount() - this.nickList[nick].timer < 60000) {
-			say("I can only make one Tp per minute ):");
+			Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "I can only make one Tp per minute ):");
 			return false;
 		}
-		say("Here you go :)");
+		Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "Here you go :)");
 		if(me.area !==120){
 			if (!Pather.makePortal()) {
 				throw new Error("giveTP: Failed to make TP");
@@ -496,7 +505,7 @@ function AutoSmurf() {
 
 						print("Team is ready! Telling others :)");
 
-						say("team is ready");
+						Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "team is ready");
 					}
 				}
 				break;
@@ -568,10 +577,10 @@ function AutoSmurf() {
 
 				break;
 			case "master":
-				say(nick + " is my master.");
+				Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, nick + " is my master.");
 				break;
 			case "smurf":
-				say("Smurf!");
+				Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "Smurf!");
 				break;
 			case "WaitMe":
 				wait = 1;
@@ -580,7 +589,7 @@ function AutoSmurf() {
 			case "yo!":
 			case "hello":
 			case "hey":
-				say("yo");
+				Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "yo");
 				break;
 			case "I'm here!":
 				ok += 1;
@@ -601,7 +610,7 @@ function AutoSmurf() {
 				break;
 			case "GimmeGold":
 				if (me.gold > Config.LowGold * 2 + 100) {
-					say("Ok Bitch");
+					Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "Ok Bitch");
 					give = 1;
 				}
 				break;
@@ -1066,7 +1075,7 @@ function AutoSmurf() {
 				Town.move("portalspot");
 
 				while (!Pather.usePortal(107, null)) {
-					say("tp");
+					Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "tp");
 
 					delay(10000);
 				}
@@ -1082,7 +1091,7 @@ function AutoSmurf() {
 				Town.move("portalspot");
 
 				while (!Pather.usePortal(35, null)) {
-					say("tp");
+					Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "tp");
 
 					delay(10000);
 				}
@@ -1123,7 +1132,7 @@ function AutoSmurf() {
 			Precast.doPrecast(true);
 			delay(3000);
 		}
-		say("I'm bored -.-");
+		Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "I'm bored -.-");
 
 		if(!Pather.accessToAct(2)){
 			if(!Pather.moveToExit(1, true)){
@@ -1163,7 +1172,7 @@ function AutoSmurf() {
 				Town.move("portalspot");
 
 				while (!Pather.usePortal(107, null)) {
-					say("tp");
+					Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "tp");
 
 					delay(10000);
 				}
@@ -1179,7 +1188,7 @@ function AutoSmurf() {
 				Town.move("portalspot");
 
 				while (!Pather.usePortal(35, null)) {
-					say("tp");
+					Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "tp");
 
 					delay(10000);
 				}
@@ -1218,7 +1227,7 @@ function AutoSmurf() {
 			delay(250);
 
 			if (!toldBarb && me.getState(32) && me.getState(26)) {
-				say("I'm Boed!");
+				Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "I'm Boed!");
 
 				toldBarb = true;
 			}
@@ -1521,7 +1530,7 @@ function AutoSmurf() {
 
 							delay(10000);
 
-							say("tp");
+							Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "tp");
 
 							while (!Pather.usePortal(areaIDs[nextAreaIndex], null)) {
 								delay(1000);
@@ -1571,7 +1580,7 @@ function AutoSmurf() {
 					if (me.diff === 0 && (goal === 0 || goal === 1 || goal === 2 || goal === 3) && areaIDs[nextAreaIndex] != destination) { // Don't wait for team if the destination has been reached. (all desinations have a waypoint)
 						print("start this.travel() waypoint wait");
 
-						say("at waypoint");
+						Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "at waypoint");
 
 						this.waitForPartyMembersByWaypoint();
 
@@ -1874,7 +1883,7 @@ function AutoSmurf() {
 
 		Town.move("portalspot");
 
-		say("ready to drink");
+		Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "ready to drink");
 
 		while (readyToDrink !== Config.AutoSmurf.TeamSize - 1) {
 			delay(250);
@@ -1941,7 +1950,7 @@ function AutoSmurf() {
 		delay(750 + me.ping);
 		Cubing.emptyCube();
 		me.cancel();
-		say("GotThePower");
+		Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "GotThePower");
 
 		return true; //(<3 kolton)
 	};
@@ -2853,7 +2862,7 @@ function AutoSmurf() {
 		Pather.teleport = false;
 
 		if (me.getItem(92)){ //teamStaff
-			say("GotStaff");
+			Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "GotStaff");
 		}
 
 		return true;
@@ -3150,7 +3159,7 @@ function AutoSmurf() {
 
 				Pather.makePortal();
 
-				say("kill radament");
+				Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "kill radament");
 			} else {
 				Town.move("portalspot");
 
@@ -3258,7 +3267,7 @@ function AutoSmurf() {
 
 				delay(me.ping * 2 + 250);
 
-				say("clear orifice");
+				Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "clear orifice");
 
 				Attack.clear(30);
 
@@ -3794,7 +3803,7 @@ function AutoSmurf() {
 		}
 
 		if (me.findItem(546) || me.findItem(547) || me.getQuest(20, 1)) { // Have A Jade Figurine or The Golden Bird or need to Return to Alkor for Reward (possible if someone's Pickit then Town processes the Quest). Tell the Teleporting Sorc so she gets us to process it.
-			say("team figurine");
+			Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "team figurine");
 
 			teamFigurine = true;
 		}
@@ -4481,7 +4490,7 @@ function AutoSmurf() {
 
 			getScript("tools/ToolsThread.js").pause(); // Pausing ToolsThread.js will effectively turn off chicken and leaving when other characters exit.
 
-			say("ready to kill diablo");
+			Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "ready to kill diablo");
 
 			while (readyToKillDiablo !== Config.AutoSmurf.TeamSize - 1) {
 				delay(250);
@@ -4762,7 +4771,7 @@ function AutoSmurf() {
 
 		if (altar) {
 			Pather.moveToUnit(altar);
-			say("WaitMe");
+			Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "WaitMe");
 			sendPacket(1, 0x31, 4, altar.gid, 4, 20002);
 			sendPacket(1, 0x13, 4, altar.type, 4, altar.gid);
 			delay(100);
@@ -5184,7 +5193,7 @@ function AutoSmurf() {
 		Pickit.pickItems();
 		delay(2000);
 		if(!quest){
-			say("avoiding congrats screen");
+			Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "avoiding congrats screen");
 
 			delay(20 * me.ping); // Wait 2-4 seconds for others to pause ToolsThread.js before leaving.
 
@@ -5196,13 +5205,169 @@ function AutoSmurf() {
 		return true;
 	};
 
-
-
-
-
 //MAIN
 	//addEventListener("copydata", ReceiveCopyData);
-	addEventListener("chatmsg", chatEvent);
+	//addEventListener("chatmsg", chatEvent);
+	addEventListener("copydata", (id, data) => {
+		let { msg, nick } = JSON.parse(data);
+
+		if (id == 55) {
+			switch (msg) {
+			case "ready":
+				readyCount += 1;
+
+				print("readyCount = " + readyCount);
+
+				if (iAmReady && readyCount === Config.AutoSmurf.TeamSize - 1) { // Doesn't count my ready because my messages are ignored. Subtract one from TeamSize to account for this.
+					if (!teamIsReady) { // Only need to change teamIsReady to true once.
+						teamIsReady = true;
+
+						print("Team is ready! Telling others :)");
+
+						Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "team is ready");
+					}
+				}
+				break;
+			case "team is ready":
+				if (!teamIsReady) { // Only need to change teamIsReady to true once.
+					teamIsReady = true;
+
+					print("Received team is ready!");
+				}
+				break;
+			case "at waypoint":
+				atWPCount += 1;
+
+				print("atWPCount = " + atWPCount);
+
+				break;
+			case "ready to drink":
+				readyToDrink += 1;
+
+				print("readyToDrink = " + readyToDrink);
+
+				break;
+			case "cube":
+				cube = true;
+				break;
+			case "need cube":
+				getCube = true;
+				break;
+			case "amulet":
+				amulet = true;
+				break;
+			case "summoner":
+				summoner = true;
+				break;
+			case "tombs":
+				tombs = true;
+				break;
+			case "radament":
+				radament = true;
+				break;
+			case "kill radament":
+				killRadament = true;
+				break;
+			case "clear orifice":
+				clearOrifice = true;
+				break;
+			case "duriel":
+				duriel = true;
+				break;
+			case "travincal":
+				travincal = true;
+				break;
+			case "team figurine":
+				teamFigurine = true;
+				break;
+			case "figurine":
+				figurine = true;
+				break;
+			case "mephisto":
+				mephisto = true;
+				break;
+			case "red portal":
+				redPortal = true;
+				break;
+			case "ready to kill diablo":
+				readyToKillDiablo += 1;
+
+				print("readyToKillDiablo = " + readyToKillDiablo);
+
+				break;
+			case "master":
+				Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, nick + " is my master.");
+				break;
+			case "smurf":
+				Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "Smurf!");
+				break;
+			case "WaitMe":
+				wait = 1;
+				break;
+			case "hi":
+			case "yo!":
+			case "hello":
+			case "hey":
+				Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "yo");
+				break;
+			case "I'm here!":
+				ok += 1;
+				break;
+			case "bo":
+				boing =1;
+				break;
+			case "I'm bored -.-":
+				goBo =1;
+				break;
+			case "I'm Boed!":
+				boed+=1;
+				break;
+			case "Ok Bitch":
+				if (me.gold < Config.LowGold) {
+					pick = 1;
+				}
+				break;
+			case "GimmeGold":
+				if (me.gold > Config.LowGold * 2 + 100) {
+					Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "Ok Bitch");
+					give = 1;
+				}
+				break;
+			case "TP":
+			case "Tp":
+			case "tp":
+			case "portal":
+			case "tp plz":
+				nickTP = nick;
+				this.giveTP(nickTP);
+				nickTP = false;
+				break;
+			case "ReadyForTravincal":
+				teamFlail = 1;
+				break;
+			case "GotScroll":
+				teamScroll = 1;
+				break;
+			case "GotStaff":
+				teamStaff = 1;
+				break;
+			case "GotThePower":
+				teamStaff2 = 1;
+				break;
+			case "GotBrain":
+				teamBrain = 1;
+				break;
+			case (msg.match("Have: ") ? msg : null): // We're comparing if that case's value is equal to our switch term. Thus, if the msg contains "Have: " compare msg to msg (do case), otherwise compare msg to null (don't do case).
+				msg = msg.split("Have: ")[1].split(""); // Change msg from a string to an array of 0's and 1's representing waypoint possession.
+
+				msg.unshift(nick); // Add the waypoint owner's name to the front of the array.
+
+				teamWaypoints.push(msg); // Record the Team Member's list of Waypoint possession values. SiC-666 TODO: Should we check to make sure this character's waypoints hasn't been previously recorded?
+
+				break;
+			}			
+		}
+	});
 /*
 	getScript("tools/Party.js").pause();
 
@@ -5228,33 +5393,33 @@ function AutoSmurf() {
 
 	this.start();
 
-	//act1
-	if (!me.getQuest(7, 0)) { // Andariel is not done.
-		Town.goToTown(1);
-
-		//den
-		if (!me.getQuest(1, 0)) {
-			this.den();
-		}
-
-		if (me.diff === 0) { // Normal difficulty.
-			//cave
-			if (!me.getQuest(2, 0) && me.getQuest(1, 0) && !this.partyLevel(caveLvl)) { // Haven't killed Blood Raven, have completed the Den of Evil and the party hasn't reached the caveLvl requirement.
-				this.cave();
-			}
-			//blood raven
-			if (!me.getQuest(2, 0) && me.getQuest(1, 0) && this.partyLevel(caveLvl)) { // Haven't killed Blood Raven, have completed the Den of Evil and the party has reached the caveLvl requirement.
-				this.blood();
-			}	
-			//cain
-			if (!me.getQuest(4, 0) && this.partyLevel(caveLvl)) { // Haven't completed The Search for Cain and the party has reached the caveLvl requirement.
-				this.cain(); // Only rescues cain SiC-666 TODO: this is redundant, should grab the questing from autoladderreset or something to consolidate.	
-			}
-			//trist
-			if (me.getQuest(4, 0) && !this.partyLevel(tristLvl)) { // Have completed The Search for Cain and the party hasn't reached the tristLvl requirement
-				this.trist();
-			}
-		}
+    //act1
+    if (!me.getQuest(7, 0)) { // Andariel is not done.
+        Town.goToTown(1);
+ 
+        //den
+        if (!me.getQuest(1, 0)) {
+            this.den();
+        }
+ 
+        if (me.diff === 0) { // Normal difficulty.
+            //cave
+            if (!me.getQuest(2, 0) && me.getQuest(1, 0) && !this.partyLevel(caveLvl)) { // Haven't killed Blood Raven, have completed the Den of Evil and the party hasn't reached the caveLvl requirement.
+                this.cave();
+            }
+            //blood raven
+            if (!me.getQuest(2, 0) && me.getQuest(1, 0) && this.partyLevel(caveLvl)) { // Haven't killed Blood Raven, have completed the Den of Evil and the party has reached the caveLvl requirement.
+                this.blood();
+            }
+            //cain
+            if (!me.getQuest(4, 0) && this.partyLevel(caveLvl)) { // Haven't completed The Search for Cain and the party has reached the caveLvl requirement.
+                this.cain(); // Only rescues cain SiC-666 TODO: this is redundant, should grab the questing from autoladderreset or something to consolidate.
+            }
+            //trist
+            if (me.getQuest(4, 0) && !this.partyLevel(tristLvl)) { // Have completed The Search for Cain and the party hasn't reached the tristLvl requirement
+                this.trist();
+            }
+        }
 
 		//andy
 		if (!me.getQuest(7, 0) && ((me.diff === 0 && this.partyLevel(tristLvl)) || (me.diff !== 0))) {
@@ -5268,13 +5433,13 @@ function AutoSmurf() {
 
 		if (teleportingSorc) { // I am the leader.
 			if (!me.getItem(549) || getCube || me.charlvl < 18) { // No cube or team member is requesting cube or am not level 18 yet (required to teleport to the summoner).
-				say("cube");
+				Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "cube");
 
 				this.cube();
 			}
 
 			if ((!me.getItem(521) && !me.getItem(91) && !me.getQuest(10, 0)) || !me.getQuest(11, 0)) { // No Amulet of the Viper/Horadric Staff and Horadric Staff quest (staff placed in orifice) is incomplete or The Tainted Sun quest is incomplete.
-				say("amulet");
+				Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "amulet");
 
 				this.amulet();
 			}
@@ -5282,7 +5447,7 @@ function AutoSmurf() {
 			if (!me.getQuest(13, 0) && me.getQuest(11 , 0)) { // Summoner quest incomplete but The Tainted Sun is complete.
 				this.travel(4); // Travel to all waypoints up to and including Arcane Sanctuary if I don't have them.
 
-				say("summoner");
+				Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "summoner");
 
 				this.summoner();
 			}
@@ -5290,7 +5455,7 @@ function AutoSmurf() {
 			if (!this.partyLevel(tombsLvl) && me.diff === 0) {
 				this.travel(5); // Travel to all waypoints up to and including Canyon Of The Magi if I don't have them.
 
-				say("tombs");
+				Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "tombs");
 
 				this.tombs(); // Clears to the chest in all of Tal Rashas Tomb's (except for the one with the Orifice). Will quit() at the end if the team hasn't reached tombsLvl requirement.
 			}
@@ -5304,13 +5469,13 @@ function AutoSmurf() {
 			}
 
 			if (!me.getQuest(9, 0) && me.diff < 0) { // Haven't finished Radament's Lair.
-				say("radament");
+				Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "radament");
 
 				this.radament();
 			}
 
 			if (!me.getQuest(14, 0) && (this.partyLevel(tombsLvl) || me.diff !== 0)) { // Haven't completed Duriel and team has reached level goal or this isn't normal difficulty.
-				say("duriel");
+				Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "duriel");
 
 				this.duriel();
 			}
@@ -5374,7 +5539,7 @@ function AutoSmurf() {
 			this.travel(6); // Travel to all waypoints up to and including Travincal if I don't have them.
 
 			if (teamFigurine) { // Someone has the Jade Figurine!
-				say("figurine");
+				Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "figurine");
 
 				this.figurine();
 			}
@@ -5396,19 +5561,19 @@ function AutoSmurf() {
 			}
 
 			if (me.getItem(174) || (me.getItem(553) && me.getItem(554) && me.getItem(555)) || !me.getQuest(20, 0) || !me.getQuest(21, 0)) { // Have Khalim's Will or have Eye, Heart, and Brain, or Golden Bird isn't complete, or The Blackened Temple isn't complete.
-				say("travincal");
+				Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "travincal");
 
 				this.travincal();
 			}
 
 			if (teamFigurine) { // Someone has the Jade Figurine!
-				say("figurine");
+				Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "figurine");
 
 				this.figurine();
 			}
 
 			if (!me.getQuest(23, 0) && me.getQuest(18, 0) && me.getQuest(21, 0) && me.getQuest(20, 0)) { // Haven't been "Able to go to Act IV" yet and have completed Khalim's Will (AKA the stairs to Durance of Hate Level 1 are open), The Blackened Temple (AKA everyone can enter a Durance Of Hate Level 3 Town Portal), and Golden Bird.
-				say("mephisto");
+				Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "mephisto");
 
 				this.travel(7); // Travel to Durance Of Hate Level 2 Waypoint if I don't have it.
 
@@ -5467,7 +5632,7 @@ function AutoSmurf() {
 			}
 
 			if (checkPartyAct === 3) { // If the lowest Town is Act 3.
-				say("red portal");
+				Messaging.sendToList(Config.AutoSmurf.AllTeamProfiles, "red portal");
 
 				D2Bot.printToConsole("AutoSmurf: Helping straggler complete Act 3.", 5);
 
@@ -5487,19 +5652,44 @@ function AutoSmurf() {
 	//act5
 	
 
-	if (me.diff == 1 && this.partyLevel(mfLvlnm) && me.getQuest(28, 0) && me.charlvl < 78) {
+	if (me.diff == 1 && this.partyLevel(mfLvlnm) && me.getQuest(28, 0) && !this.partyLevel(76)) {
 		if (teleportingSorc) { 
 			D2Bot.printToConsole("I'm the leader, changed script.");
 			OnOff.enable("Config.MFLeader");
-			OnOff.enable("Config.Andariel");
-			OnOff.enable("Config.Countess");
-			OnOff.enable("Config.Mephisto");
-			OnOff.enable("Config.Pit");
-			OnOff.enable("Config.Pindleskin");	
-			OnOff.enable("Config.Eldritch");
-			OnOff.enable("Config.Baal");			
+			OnOff.enable("Scripts.Andariel");
+			OnOff.enable("Scripts.Countess");
+			OnOff.enable("Scripts.Mephisto");
+			OnOff.enable("Scripts.Pit");
+			OnOff.enable("Scripts.Pindleskin");	
+			OnOff.enable("Scripts.Eldritch");
+			OnOff.enable("Scripts.Baal");	
+			OnOff.enable("Scripts.BaalHelper");			
 		} else {
 			OnOff.enable("Scripts.MFHelper");
+			OnOff.enable("Scripts.BaalHelper");
+			D2Bot.printToConsole("I'm a follower, changed script.");
+		}
+		OnOff.disable("Scripts.AutoSmurf");
+	}
+	
+	// Hell MF switch
+		if (me.diff == 2 && this.partyLevel(mfLvlhell) && me.getQuest(28, 0) && !this.partyLevel(95)) {
+		if (teleportingSorc) { 
+			D2Bot.printToConsole("I'm the leader, changed script.");
+			OnOff.enable("Config.MFLeader");
+			OnOff.enable("Scripts.Andariel");
+			OnOff.enable("Scripts.Countess");
+			OnOff.enable("Scripts.Mephisto");
+			OnOff.enable("Scripts.Pit");
+			OnOff.enable("Scripts.Pindleskin");	
+			OnOff.enable("Scripts.Eldritch");
+			OnOff.enable("Scripts.Nihlathak");
+			OnOff.enable("Scripts.Baal");	
+			OnOff.enable("Scripts.BaalHelper");	
+			OnOff.enable("Config.Baal.KillBaal");			
+		} else {
+			OnOff.enable("Scripts.MFHelper");
+			OnOff.enable("Scripts.BaalHelper");
 			D2Bot.printToConsole("I'm a follower, changed script.");
 		}
 		OnOff.disable("Scripts.AutoSmurf");
