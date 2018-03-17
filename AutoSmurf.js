@@ -20,10 +20,10 @@ js_strict(true);
 // [normal, nightmare, hell]
 var SmurfConfig = {
     caveLvl: [5, -1, -1],
-    tristLvl: [14, -1, -1],
-    tombsLvl: [22, -1, -1],
-    diaLvl: [24, 40, 60],
-    walkBaalLvl: [28, -1, -1],
+    tristLvl: [15, -1, -1],
+    tombsLvl: [25, -1, -1],
+    diaLvl: [30, 65, 98],
+    walkBaalLvl: [35, -1, -1],
     killBaal: true
 };
 
@@ -32,7 +32,7 @@ Config.MinGameTime = 3 * 60;
 Config.MaxGameTime = (((!me.gametype && me.getQuest(26, 0))
                         || me.getQuest(40, 0)) ? 7 : 20) * 60;
 me.maxgametime = Config.MaxGameTime * 1000;
-Config.OpenChests = 2;
+//Config.OpenChests = 2;
 Config.PickRange = 30;
 Config.LowGold = me.charlvl * 1000;
 Config.StashGold = Config.LowGold / 2;
@@ -55,7 +55,7 @@ var Msg = {action: "", x: 0, y: 0, area: 0, timer: getTickCount()};
 var Team = {
     size: 2 + Config.AutoSmurf.Smurfs.length,
     type: {all: (1 | 2 | 4), smurfette: 1, bigSmurf: 2, smurf: 4},
-    myType: 4,
+    myType: 5,
     names: [],
 
     init: function () {
@@ -937,8 +937,10 @@ var Team = {
     announce: function (msg) {
         print(msg);
         if (this.myType === this.type.smurfette
-                && this.inGame() > this.size) {
-            say(msg);
+                && this.inGame() > this.size) 
+				{
+          //  say(msg);
+		  print("we've forgot to remove an annoncement");
         }
     }
 };
@@ -977,6 +979,7 @@ var Util = {
             delay(me.ping * 2 + 250);
             Pather.moveTo(me.x + rand(-5, 5), me.y + rand(-5, 5),
                             3, Config.ClearType);
+			Config.OpenChests = false;
             delay(me.ping);
             Packet.flash(me.gid);
             delay(me.ping * 2 + 250);
@@ -1196,13 +1199,15 @@ var Util = {
         default:
             return false;
         }
+		
+		Config.OpenChests = false;
 
         Town.move("waypoint");
         Pather.getWP(me.area);
 
         target = Pather.plotCourse(wpAreas[wpAreas.length - 1], me.area);
         j = areaIDs.indexOf(target.course[0]) + 1;
-        Team.announce("travel " + target.course);
+       // Team.announce("travel " + target.course);
 
         if (j < areaIDs.length) {
             if (me.inTown && wpAreas.indexOf(target.course[0]) > -1
@@ -1507,7 +1512,7 @@ var Util = {
 var Quest = {
     act1: function () {
         this.den = function () {
-            Team.announce("den");
+           // Team.announce("den");
 
             var cleartry;
 
@@ -1523,7 +1528,7 @@ var Quest = {
                     for (cleartry = 1;
                             cleartry <= 3 && !me.getQuest(1, 1);
                             cleartry += 1) {
-                        Team.announce("clearing - try number " + cleartry);
+                      //  Team.announce("clearing - try number " + cleartry);
                         Attack.clearLevel();
                         delay(100);
                     }
@@ -1549,7 +1554,7 @@ var Quest = {
         };
 
         this.cave = function () {
-            Team.announce("cave");
+            //Team.announce("cave");
 
             var chest, i;
 
@@ -1592,7 +1597,7 @@ var Quest = {
         };
 
         this.bloodRaven = function () {
-            Team.announce("BloodRaven");
+           // Team.announce("BloodRaven");
 
             if (!me.getQuest(2, 1)) {
                 Pather.useWaypoint(3);
@@ -1615,7 +1620,7 @@ var Quest = {
         };
 
         this.cain = function () {
-            Team.announce("cain");
+ //           Team.announce("cain");
 
             var i, unit,
                 stones = [];
@@ -1717,7 +1722,7 @@ var Quest = {
         };
 
         this.trist = function () {
-            Team.announce("trist");
+         //   Team.announce("trist");
 
             var i,
                 xx = [ 25175, 25147, 25149, 25127, 25128, 25150, 25081,
@@ -1750,7 +1755,7 @@ var Quest = {
         };
 
         this.andy = function () {
-            Team.announce("andy");
+            //Team.announce("andy");
 
             if (me.getQuest(6, 0) && !me.getQuest(7, 0)) {
                 Team.changeAct(2);
@@ -1847,7 +1852,7 @@ var Quest = {
 
     act2: function () {
         this.cube = function () {
-            Team.announce("getting cube");
+           // Team.announce("getting cube");
 
             this.toChest = function () {
                 try {
@@ -1905,7 +1910,7 @@ var Quest = {
         };
 
         this.amulet = function () {
-            Team.announce("getting amulet");
+          //  Team.announce("getting amulet");
 
             var i,
                 path = [44, 45, 58, 61];
@@ -1965,7 +1970,7 @@ var Quest = {
         };
 
         this.staff = function () {
-            Team.announce("getting staff");
+        //    Team.announce("getting staff");
 
             Util.travel(2);
             Pather.teleport = true;
@@ -1997,7 +2002,7 @@ var Quest = {
         };
 
         this.cubeStaff = function () {
-            Team.announce("cubing staff");
+          //  Team.announce("cubing staff");
 
             var amulet = me.getItem("vip"),
                 staff = me.getItem("msf");
@@ -2022,7 +2027,7 @@ var Quest = {
         };
 
         this.summoner = function () {
-            Team.announce("killing summoner");
+          //  Team.announce("killing summoner");
 
             var i, journal, preset,
                 spot = {};
@@ -2130,7 +2135,7 @@ var Quest = {
         };
 
         this.tombs = function () {
-            Team.announce("cleaning tombs");
+           // Team.announce("cleaning tombs");
 
             var i, j, unit, tpTome;
 
@@ -2244,10 +2249,10 @@ var Quest = {
         };
 
         this.duriel = function () {
-            Team.announce("killing duriel");
+          //  Team.announce("killing duriel");
 
             this.placeStaff = function () {
-                Team.announce("place staff");
+          //      Team.announce("place staff");
 
                 var staff, orifice,
                     preArea = me.area;
@@ -2398,7 +2403,7 @@ var Quest = {
 
     act3: function () {
         this.figurine = function () {
-            Team.announce("figurine");
+        //    Team.announce("figurine");
             var unit;
 
             if (me.getItem(546)) { //ajadefigurine
@@ -2425,7 +2430,7 @@ var Quest = {
         };
 
         this.lamEssen = function () {
-            Team.announce("lam essen");
+       //     Team.announce("lam essen");
 
             var alkor;
 
@@ -2441,7 +2446,7 @@ var Quest = {
         };
 
         this.eye = function () {
-            Team.announce("getting eye");
+       //     Team.announce("getting eye");
 
             var units, unit;
 
@@ -2475,7 +2480,7 @@ var Quest = {
         };
 
         this.heart = function () {
-            Team.announce("getting heart");
+      //      Team.announce("getting heart");
 
             Pather.teleport = true;
             Pather.useWaypoint(80, true);
@@ -2501,7 +2506,7 @@ var Quest = {
         };
 
         this.brain = function () {
-            Team.announce("getting brain");
+     //       Team.announce("getting brain");
 
             Pather.teleport = true;
             Pather.useWaypoint(78, true);
@@ -2532,7 +2537,7 @@ var Quest = {
         };
 
         this.travincal = function () {
-            Team.announce("travincal");
+     //       Team.announce("travincal");
 
             this.cubeFlail = function () {
                 print("cubing flail");
@@ -2709,7 +2714,7 @@ var Quest = {
         };
 
         this.mephisto = function () {
-            Team.announce("mephisto");
+//            Team.announce("mephisto");
 
             var time;
 
@@ -2781,7 +2786,7 @@ var Quest = {
 
     act4: function () {
         this.izual = function () {
-            Team.announce("izual");
+   //         Team.announce("izual");
 
             Pather.teleport = true;
             if (!me.getQuest(25, 1)) {
@@ -2811,7 +2816,7 @@ var Quest = {
         };
 
         this.diablo = function () { //(<3 kolton)
-            Team.announce("diablo");
+ //           Team.announce("diablo");
 
             // Sort function
             this.sort = function (a, b) {
@@ -3217,7 +3222,7 @@ var Quest = {
 
     act5: function () {
         this.shenk = function () {
-            Team.announce("shenk");
+     //       Team.announce("shenk");
 
             if (Team.myType === Team.type.smurfette) {
                 Pather.useWaypoint(111, true);
@@ -3242,7 +3247,7 @@ var Quest = {
         };
 
         this.rescueBarbs = function () {
-            Team.announce("rescueBarbs");
+      //      Team.announce("rescueBarbs");
             //(<3 Larryw)
             var i, j, unit, skill,
                 coords = [],
@@ -3296,7 +3301,7 @@ var Quest = {
         };
 
         this.anya = function () {
-            Team.announce("anya");
+     //      Team.announce("anya");
 
             var unit, i;
 
@@ -3304,7 +3309,8 @@ var Quest = {
                 Town.move("malah");
                 unit = getUnit(1, "malah");
                 if (unit) {
-                    sendPacket(1, 0x31, 4, unit.gid, 4, 20127);
+                    malah.interact();
+					//sendPacket(1, 0x31, 4, unit.gid, 4, 20127);
                         //FREE POT!(<3 Imba)
                     delay(me.ping);
                     sendPacket(1, 0x40);
@@ -3341,11 +3347,13 @@ var Quest = {
                 unit = getPresetUnit(me.area, 2, 460);
                 Pather.moveToUnit(unit);
                 delay(me.ping + 850);
-                sendPacket(1, 0x31, 4, 0xffffffff, 4, 20131);
+                anya.interact();
+				//sendPacket(1, 0x31, 4, 0xffffffff, 4, 20131);
                 delay(me.ping + 50);
                 unit = getUnit(2, 558); //anya
                 if (unit) {
-                    sendPacket(1, 0x13, 4, unit.type, 4, unit.gid);
+                    anya.interact();
+					//sendPacket(1, 0x13, 4, unit.type, 4, unit.gid);
                 }
                 me.cancel();
                 Town.goToTown();
@@ -3376,7 +3384,7 @@ var Quest = {
         };
 
         this.ancients = function () {
-            Team.announce("ancients");
+      //      Team.announce("ancients");
 
             var altar, i, j,
                 boss = [22488, 22489, 22490]; //Korlic, Madawc, Talic
@@ -3457,7 +3465,7 @@ var Quest = {
         };
 
         this.baal = function () {  //(<3 YGM)
-            Team.announce("baal");
+      //      Team.announce("baal");
 
             this.preattack = function () {
                 var check;
@@ -3932,7 +3940,8 @@ function AutoSmurf() {
         }
     });
 
-    addEventListener("chatmsg", function (nick, msg) {
+/*    addEventListener("chatmsg", function (nick, msg) bannable
+	{
         var hello = ["hi", "yo", "hey", "hello", "sup"];
 
         if (/(\W+|^)(tp|portal|townportal|bo)(\W+|$)/i.test(msg)
@@ -3968,7 +3977,7 @@ function AutoSmurf() {
                 && Team.myType === Team.type.bigSmurf) {
             say("Yeah well sorry, I'm just a smurf... I mean, an AutoSmurf!");
         }
-    });
+    });*/ //BAnnABLE
 
     if (Team.init()) {
         while (Quest.launch()) {
